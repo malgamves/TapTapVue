@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
 
 export default {
     name:'GameActivity',
@@ -32,17 +31,10 @@ export default {
         colors:['#9bcd77','#d777b0','#fed401','#ff2c3c', '#66c652'],
         }
     },
-    
-    computed: {
-      ...mapGetters({
-     uuid: 'getMyUuid',
-      }),
-    },
-
     mounted(){
         var self = this;
         this.$pnSubscribe({
-          channels: ['vueGame']
+          channels: ['score']
         });
         setInterval(function(){
             if(self.active){
@@ -57,13 +49,16 @@ export default {
     methods: {
         updateCount: function () {
             this.loaded = true;
-            this.players.one.score += 1;
-            this.$pnPublish({ channel: this.players.two.name, message: this.players.one.score }, (status, response) => console.log(status, response));    
+            this.numClicks += 1;
             if(this.active == false){
                 this.secs = 10;
                 this.numClicks = 0;
                 this.active = true;
             }
+            this.$pnPublish({
+          channel: 'score',
+          message: this.numClicks
+        });
 
            /* if (this.numClicks % 10 == 0) {
                 ("button").animate({ width: '-=15px', height: '-=15px' }, 500, 'easeOutElastic', function () { })

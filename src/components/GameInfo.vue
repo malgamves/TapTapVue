@@ -1,6 +1,6 @@
 <template>
     <div>
-      <h2> Your user name: {{ uuid }}</h2>
+      <h2> Your user name: {{ username }}</h2>
       <h2> You are playing against </h2>
     </div>
 </template>
@@ -14,10 +14,9 @@ export default {
         return { 
         }
     },
-    
-    computed: {
+   computed: {
       ...mapGetters({
-     uuid: 'getMyUuid',
+     username: 'getMyUsername',
       }),
     },
 }

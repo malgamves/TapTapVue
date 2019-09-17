@@ -1,13 +1,3 @@
-<script>
-  export default {
-    name: 'modal',
-    methods: {
-      close() {
-        this.$emit('close');
-      },
-    },
-  };
-</script>
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
@@ -19,39 +9,79 @@
           class="modal-header"
           id="modalTitle">
           <slot name="header">
-            This is the default tile!
+            <div> Welcome to TapTapVue!
             <button
               type="button"
               class="btn-close"
               @click="close"
               aria-label="Close modal">  x
-            </button>
+            </button></div>
           </slot>
         </header>
         <section
           class="modal-body"
           id="modalDescription">
           <slot name="body">
-            Your Username is --- 
+            Your Username is {{username}} 
           </slot>
         </section>
         <footer class="modal-footer">
           <slot name="footer">
-            I'm the default footer!
-            <button
+            Ready to see who has the fastest fingers?
+          </slot>
+          <br>
+          <button
               type="button"
               class="btn-green"
               @click="close"
               aria-label="Close modal">
-              Close me!
+              I'm Ready
             </button>
-          </slot>
         </footer>
       </div>
     </div>
   </transition>
 </template>
+
+<script>
+import {mapGetters} from 'vuex';
+
+export default {
+    name: 'Modal',
+    methods: {
+      close() {
+        this.$emit('close');
+        this.$pnPublish({
+          channel: 'lobby',
+          message: this.$store.state.username
+        });
+      }
+    },
+    computed: {
+      ...mapGetters({
+     username: 'getMyUsername',
+      }),
+    },
+    mounted() {
+      this.$pnSubscribe({
+        channels: ["lobby"]
+      });
+    },
+  };
+</script>
+
 <style scoped>
+  button {
+    position: relative;
+    top: 0px;
+    border: none;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    transition: 0.3s;
+    border-radius: 1%;
+    background-color: #f2ca27;
+  }
   .modal-backdrop {
     position: fixed;
     top: 0;

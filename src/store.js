@@ -20,7 +20,7 @@ const mutations = {
 }
 
 const getters = {
-  getMyUuid: (state) => state.me.uuid,
+  getMyUsername: (state) => state.me.userName,
   //getHistoryMsgs: (state) => state.history,
 };
   

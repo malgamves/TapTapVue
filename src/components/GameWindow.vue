@@ -12,11 +12,15 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+//import {mapGetters} from 'vuex';
 import GameInfo from './GameInfo.vue';
 import GameActivity from './GameActivity.vue';
 import ScoreKeeper from './ScoreKeeper.vue';
 import Modal from './Modal.vue';
+
+//let roomID = "hello";
+//let gameChannel = "taptap" + roomID;
+//console.log(gameChannel)
 
 export default {
     name:'GameWindow',
@@ -26,53 +30,21 @@ export default {
         ScoreKeeper,
         Modal
     },
-    
     data() {
         return { 
         isModalVisible: true
         }
     },
-    
-    computed: {
-      ...mapGetters({
-     uuid: 'getMyUuid',
-      }),
+    mounted() {
+      this.$pnSubscribe({
+        channels: ["game"]
+      });
     },
-
-    mounted(){
-        var self = this;
-        //this.$pnSubscribe({ channels: [this.players.one.name, this.players.two.name], withPresence: true });
-        this.$pnSubscribe({
-          channels: ['vueGame']
-        });
-        setInterval(function(){
-            if(self.active){
-                self.secs--;
-                if(self.secs == 0){
-                    self.active = false;
-                }
-            }
-        },1000);
-
-        showModal();
-    },
-
     methods: {
-        updateCount: function () {
-            this.loaded = true;
-            this.players.one.score += 1;
-            this.$pnPublish({ channel: this.players.two.name, message: this.players.one.score }, (status, response) => console.log(status, response));    
-            if(this.active == false){
-                this.secs = 10;
-                this.numClicks = 0;
-                this.active = true;
-            }
-
-        },
         closeModal() {
         this.isModalVisible = false;
       },
-      showModal() {
+        showModal() {
         this.isModalVisible = true;
       }
     } 
@@ -80,7 +52,7 @@ export default {
 } 
 </script>
 
-<style>
+<style scoped>
 body {
   background-color: #323133;
   color: #fff;
@@ -97,17 +69,7 @@ table {
     text-align: center;
 }
 
-button {
-  position: relative;
-  top: 100px;
-  border: none;
-  color: #fff;
-  width: 200px;
-  height: 200px;
-  transition: 0.3s;
-  border-radius: 50%;
-  background-color: #f2ca27;
-}
+y
 button:active {
   width: 190px;
   height: 190px;
